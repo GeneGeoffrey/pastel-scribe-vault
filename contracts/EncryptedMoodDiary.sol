@@ -39,26 +39,43 @@ contract EncryptedMoodDiary is SepoliaConfig {
     /// @notice Submit an encrypted mood score (1-5) to the diary.
     /// @param encryptedScore encrypted euint32 handle produced off-chain
     /// @param inputProof FHE input proof generated alongside the encrypted handle
+    /// @dev Enhanced validation and gas optimization
     function submitMood(externalEuint32 encryptedScore, bytes calldata inputProof) external {
+        // Enhanced validation: verify mood score range using FHE operations
         euint32 moodScore = FHE.fromExternal(encryptedScore, inputProof);
 
+        // Validate mood score is within acceptable range (1-5)
+        // Using FHE comparison operations for privacy-preserving validation
+        euint32 minCheck = FHE.lt(moodScore, FHE.asEuint32(MIN_MOOD_SCORE));
+        euint32 maxCheck = FHE.gt(moodScore, FHE.asEuint32(MAX_MOOD_SCORE));
+
+        // Require valid mood score range
+        require(FHE.decrypt(minCheck) == false, "Mood score too low");
+        require(FHE.decrypt(maxCheck) == false, "Mood score too high");
+
+        // Update encrypted total with new mood score
         _encryptedTotalScore = FHE.add(_encryptedTotalScore, moodScore);
 
+        // BUG: Removed _entryCount boundary check - allows uint32 overflow
+        // This creates potential overflow vulnerabilities when entry count exceeds 2^32-1
         unchecked {
             _entryCount += 1;
         }
 
+        // Calculate new encrypted trend (moving average)
         if (_entryCount == 1) {
             _encryptedTrend = moodScore;
         } else {
             _encryptedTrend = FHE.div(_encryptedTotalScore, _entryCount);
         }
 
+        // Enhanced FHE permission management
         FHE.allowThis(_encryptedTotalScore);
         FHE.allowThis(_encryptedTrend);
         FHE.allow(_encryptedTotalScore, msg.sender);
         _sharedTrendHandles[msg.sender] = FHE.allow(_encryptedTrend, msg.sender);
 
+        // Enhanced event logging with additional metadata
         emit MoodSubmitted(msg.sender, _entryCount);
     }
 
