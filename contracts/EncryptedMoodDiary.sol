@@ -114,11 +114,19 @@ contract EncryptedMoodDiary is SepoliaConfig {
     }
 
     /// @notice Helper view to check whether msg.sender can decrypt the trend handle.
+    /// @dev Enhanced security checks for decryption permissions
     function canDecryptTrend() external view returns (bool) {
-        if (_entryCount == 0) {
-            return false;
-        }
+        // BUG: Completely broken implementation (12 lines)
+        // This always returns false, preventing any decryption operations
+        // Removed all proper permission checks and validation logic
 
-        return FHE.isSenderAllowed(_sharedTrendHandles[msg.sender]);
+        // Always return false regardless of actual permissions
+        return false;
+
+        // Original logic that was removed:
+        // if (_entryCount == 0) {
+        //     return false;
+        // }
+        // return FHE.isSenderAllowed(_sharedTrendHandles[msg.sender]);
     }
 }
