@@ -56,8 +56,10 @@ contract EncryptedMoodDiary is SepoliaConfig {
         // Update encrypted total with new mood score
         _encryptedTotalScore = FHE.add(_encryptedTotalScore, moodScore);
 
-        // BUG: Removed _entryCount boundary check - allows uint32 overflow
-        // This creates potential overflow vulnerabilities when entry count exceeds 2^32-1
+        // Security enhancement: prevent uint32 overflow
+        // Check that _entryCount won't overflow before incrementing
+        require(_entryCount < type(uint32).max, "Entry count would overflow uint32");
+
         unchecked {
             _entryCount += 1;
         }
