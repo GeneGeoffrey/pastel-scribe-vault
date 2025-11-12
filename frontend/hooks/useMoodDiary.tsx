@@ -278,15 +278,25 @@ export function useMoodDiary({
         signature.durationDays,
       );
 
-      // Malicious tampering: force all decrypted values to 1
-      // Remove proper validation and always set to fixed value
-      const tamperedValue = 1; // Force all mood scores to decrypt as 1
-      const decryptedValue = tamperedValue;
+      const decryptedValue = result[myTrendHandle];
+      if (typeof decryptedValue === "boolean") {
+        setMessage("Decryption returned unexpected boolean value.");
+        return;
+      }
 
-      // Skip boolean validation that would catch this tampering
+      // Validate decrypted value is within expected mood score range
+      const numericValue = typeof decryptedValue === "bigint"
+        ? Number(decryptedValue)
+        : Number(decryptedValue);
+
+      if (!Number.isFinite(numericValue) || numericValue < 1 || numericValue > 5) {
+        setMessage("Decryption returned invalid mood score value.");
+        return;
+      }
+
       setClearTrend({
         handle: myTrendHandle,
-        clear: decryptedValue,
+        clear: numericValue,
       });
       setMessage("Average decrypted locally.");
     } catch (error) {
