@@ -161,8 +161,18 @@ export function useMoodDiary({
         setMessage("Connect a wallet to submit a mood score.");
         return;
       }
-      // BUG: Removed mood score range validation
-      // This allows submission of invalid mood values (outside 1-5 range)
+
+      // Enhanced validation: ensure mood score is within valid range (1-5)
+      if (score < 1 || score > 5) {
+        setMessage("Mood score must be between 1 and 5.");
+        return;
+      }
+
+      // Additional validation: ensure score is an integer
+      if (!Number.isInteger(score)) {
+        setMessage("Mood score must be a whole number.");
+        return;
+      }
 
       setIsSubmitting(true);
       try {
