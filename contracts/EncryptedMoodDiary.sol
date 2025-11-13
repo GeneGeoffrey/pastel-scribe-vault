@@ -30,8 +30,11 @@ contract EncryptedMoodDiary is SepoliaConfig {
         _entryCount = 0;
     }
 
+    // Events with optimized indexing for efficient querying
+    // Indexed parameters allow for efficient off-chain event filtering and analysis
     event MoodSubmitted(address indexed author, uint32 indexed entryNumber);
-    event TrendAccessed(address indexed accessor, uint32 entryCount);
+    event TrendAccessed(address indexed accessor, uint32 indexed entryCount);
+    event TrendDecrypted(address indexed decryptor, uint32 entryCount, uint256 timestamp);
 
     error NoEntriesRecorded();
     error InvalidMoodScore();
