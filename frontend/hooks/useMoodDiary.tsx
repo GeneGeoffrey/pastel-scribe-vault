@@ -62,6 +62,42 @@ const userRejected = (error: unknown) => {
   return code === "ACTION_REJECTED" || code === 4001;
 };
 
+const getErrorMessage = (error: unknown): string => {
+  if (!error) return "Unknown error occurred";
+
+  if (typeof error === "string") return error;
+
+  if (error instanceof Error) {
+    // Handle specific FHEVM errors
+    if (error.message.includes("network")) {
+      return "Network connection error. Please check your internet connection.";
+    }
+    if (error.message.includes("contract")) {
+      return "Smart contract error. Please try again or contact support.";
+    }
+    if (error.message.includes("FHE")) {
+      return "FHEVM encryption error. Please refresh the page and try again.";
+    }
+    return error.message;
+  }
+
+  // Handle object errors
+  const errorObj = error as Record<string, unknown>;
+  const message = errorObj.message || errorObj.error || errorObj.reason;
+
+  if (typeof message === "string") {
+    if (message.includes("insufficient funds")) {
+      return "Insufficient funds for transaction. Please check your wallet balance.";
+    }
+    if (message.includes("gas")) {
+      return "Transaction gas error. Please try again with higher gas limit.";
+    }
+    return message;
+  }
+
+  return "An unexpected error occurred. Please try again.";
+};
+
 export function useMoodDiary({
   instance,
   storage,
@@ -192,11 +228,11 @@ export function useMoodDiary({
         setMessage("Mood encrypted and stored privately.");
         await refreshStats();
       } catch (error) {
-        console.error(error);
+        console.error("Mood submission error:", error);
         if (userRejected(error)) {
-          setMessage("交易已被钱包拒绝。");
+          setMessage("Transaction was rejected by your wallet.");
         } else {
-          setMessage("Failed to submit mood entry.");
+          setMessage(`Failed to submit mood entry: ${getErrorMessage(error)}`);
         }
       } finally {
         setIsSubmitting(false);
@@ -233,11 +269,11 @@ export function useMoodDiary({
       }
       await refreshStats();
     } catch (error) {
-      console.error(error);
+      console.error("Trend access request error:", error);
       if (userRejected(error)) {
-        setMessage("钱包已取消分享授权。");
+        setMessage("Wallet cancelled trend access authorization.");
       } else {
-        setMessage("Unable to request access to the trend.");
+        setMessage(`Failed to request trend access: ${getErrorMessage(error)}`);
       }
     } finally {
       setIsRequestingAccess(false);
@@ -310,11 +346,11 @@ export function useMoodDiary({
       });
       setMessage("Average decrypted locally.");
     } catch (error) {
-      console.error("Decryption error:", error);
+      console.error("Trend decryption error:", error);
       if (userRejected(error)) {
-        setMessage("钱包已取消签名。请重试。");
+        setMessage("Wallet cancelled decryption signature. Please try again.");
       } else {
-        setMessage(`解密失败: ${error instanceof Error ? error.message : "未知错误"}`);
+        setMessage(`Decryption failed: ${getErrorMessage(error)}`);
       }
     } finally {
       setIsDecrypting(false);
