@@ -152,7 +152,14 @@ export default function Home() {
             disabled={!diary.isReadyForTx || diary.isSubmitting}
             className="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-[#8f5bff] to-[#3ec5ff] px-4 sm:px-6 py-3 sm:py-4 text-base sm:text-lg font-semibold text-white shadow-2xl transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40 w-full sm:w-auto"
           >
-            {diary.isSubmitting ? "🔐 Encrypting mood..." : "Save encrypted mood"}
+            {diary.isSubmitting ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
+                Encrypting mood...
+              </>
+            ) : (
+              "Save encrypted mood"
+            )}
           </button>
           <p className="text-sm text-slate-300">
             Your wallet signs the entry; the clear score never leaves your
@@ -194,16 +201,28 @@ export default function Home() {
               disabled={!diary.isReadyForTx || diary.isRequestingAccess}
               className="rounded-2xl border border-white/20 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/60 disabled:cursor-not-allowed disabled:opacity-30"
             >
-              {diary.isRequestingAccess
-                ? "🔗 Sharing handle..."
-                : "Share trend to wallet"}
+              {diary.isRequestingAccess ? (
+                <>
+                  <div className="animate-spin rounded-full h-3 w-3 border border-white border-t-transparent mr-2 inline-block"></div>
+                  Sharing handle...
+                </>
+              ) : (
+                "Share trend to wallet"
+              )}
             </button>
             <button
               onClick={diary.decryptTrend}
               disabled={!diary.canDecrypt}
               className="rounded-2xl border border-lime-200/60 bg-lime-200/20 px-4 py-3 text-sm font-semibold text-lime-100 transition hover:bg-lime-200/30 disabled:cursor-not-allowed disabled:opacity-30"
             >
-              {diary.isDecrypting ? "Decrypting..." : "Decrypt average"}
+              {diary.isDecrypting ? (
+                <>
+                  <div className="animate-spin rounded-full h-3 w-3 border border-lime-100 border-t-transparent mr-2 inline-block"></div>
+                  Decrypting...
+                </>
+              ) : (
+                "Decrypt average"
+              )}
             </button>
           </div>
 
