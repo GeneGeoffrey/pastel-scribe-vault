@@ -1,0 +1,26 @@
+{
+  "name": "Encrypted Mood Diary",
+  "version": "1.0.0",
+  "networks": {
+    "sepolia": {
+      "chainId": 11155111,
+      "contractAddress": "",
+      "rpcUrl": "https://sepolia.infura.io/v3/YOUR_INFURA_KEY"
+    },
+    "localhost": {
+      "chainId": 31337,
+      "contractAddress": "",
+      "rpcUrl": "http://localhost:8545"
+    }
+  },
+  "features": {
+    "enableMockData": false,
+    "enableDebugLogging": false,
+    "enableAnalytics": false
+  },
+  "build": {
+    "optimizeForProduction": true,
+    "enableSourceMaps": true,
+    "enableCompression": true
+  }
+}
