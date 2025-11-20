@@ -84,7 +84,9 @@
     "deploy:sepolia": "npx hardhat run scripts/deploy.ts --network sepolia",
     "deploy:localhost": "npx hardhat run scripts/deploy.ts --network localhost",
     "verify:sepolia": "npx hardhat verify --network sepolia",
-    "full-deploy": "npm run build && npm run deploy:sepolia && npm run build:frontend"
+    "verify-deployment": "node scripts/verify-deployment.js",
+    "full-deploy": "npm run build && npm run deploy:sepolia && npm run build:frontend",
+    "predeploy": "npm run verify-deployment"
   },
   "overrides": {
     "ws@>=7.0.0 <7.5.10": ">=7.5.10",
