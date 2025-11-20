@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Enhanced styling for encrypted mood diary interface */
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  min-height: 100vh;
+  background-color: #060511;
+}
+
+.zama-bg {
+  background: radial-gradient(circle at 15% 20%, rgba(145, 76, 255, 0.25), transparent 45%),
+    radial-gradient(circle at 85% 30%, rgba(55, 196, 255, 0.2), transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(90, 197, 145, 0.18), transparent 55%),
+    #05030c;
+}
+
+.glass-card {
+  @apply rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl;
+}

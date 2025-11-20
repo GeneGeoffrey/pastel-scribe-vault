@@ -1,0 +1,16 @@
+<svg width="240" height="60" viewBox="0 0 240 60" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#a16bff"/>
+      <stop offset="100%" stop-color="#3ed4ff"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="56" height="56" rx="14" fill="#0f0c1d" stroke="url(#logoGradient)" stroke-width="3"/>
+  <path d="M16 32c6 14 19 22 28 22s22-8 28-22" stroke="url(#logoGradient)" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <circle cx="26" cy="22" r="5" fill="url(#logoGradient)"/>
+  <circle cx="46" cy="22" r="5" fill="url(#logoGradient)"/>
+  <text x="72" y="38" font-family="'Segoe UI', Arial, sans-serif" font-size="22" font-weight="600" fill="#f4f3ff">
+    Encrypted Mood Diary
+  </text>
+</svg>
+
