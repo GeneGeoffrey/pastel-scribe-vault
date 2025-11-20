@@ -8,6 +8,12 @@ A privacy-preserving mood tracking application built with Fully Homomorphic Encr
 
 **Demo Video:** [Watch the demonstration](./daliy.mp4)
 
+🎬 **Video Overview:** This demonstration video showcases the complete user journey:
+- Wallet connection and network setup
+- Mood score encryption and submission
+- Trend calculation and decryption
+- Privacy-preserving analytics features
+
 ## 📋 Features
 
 - **🔒 Fully Encrypted Storage**: All mood scores are encrypted using FHEVM before leaving your browser
