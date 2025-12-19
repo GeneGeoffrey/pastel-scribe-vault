@@ -4,7 +4,7 @@ A privacy-preserving mood tracking application built with Fully Homomorphic Encr
 
 ## 🚀 Live Demo
 
-**Application URL:** [https://diarywen-chi.vercel.app/](https://diarywen-chi.vercel.app/)
+**Application URL:** [https://diarywen-chi.vercel.app/](https://pastel-scribe-vault.vercel.app/)
 
 **Demo Video:** [Watch the demonstration](./daliy.mp4)
 

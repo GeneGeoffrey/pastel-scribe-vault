@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ['@fhevm/solidity', '@rainbow-me/rainbowkit'],
   },
 
+  // Turbopack configuration
+  turbopack: {},
+
   // Security headers for FHEVM compatibility
   async headers() {
     return [
@@ -14,7 +17,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: "Cross-Origin-Opener-Policy",
-            value: "same-origin",
+            value: "unsafe-none",
           },
           {
             key: "Cross-Origin-Embedder-Policy",
@@ -44,7 +47,12 @@ const nextConfig: NextConfig = {
 
   // Image optimization
   images: {
-    domains: ['sepolia.etherscan.io'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'sepolia.etherscan.io',
+      },
+    ],
   },
 };
 

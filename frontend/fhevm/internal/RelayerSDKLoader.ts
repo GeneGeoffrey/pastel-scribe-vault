@@ -7,7 +7,9 @@ export class RelayerSDKLoader {
   private _trace?: TraceType;
 
   constructor(options: { trace?: TraceType }) {
-    this._trace = options.trace;
+    if (options.trace) {
+      this._trace = options.trace;
+    }
   }
 
   public isLoaded() {

@@ -131,7 +131,7 @@ export function useFhevm(parameters: {
       createFhevmInstance({
         signal: thisSignal,
         provider: thisProvider,
-        mockChains: thisRpcUrlsByChainId,
+        ...(thisRpcUrlsByChainId && { mockChains: thisRpcUrlsByChainId }),
         onStatusChange: (s) =>
           console.log(`[useFhevm] createFhevmInstance status changed: ${s}`),
       })

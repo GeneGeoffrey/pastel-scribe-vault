@@ -31,7 +31,7 @@ export default function RootLayout({
                 priority
               />
               <div className="flex items-center gap-3">
-                <span className="hidden md:block text-sm uppercase tracking-widest text-slate-200">
+                <span className="hidden md:block text-sm uppercase tracking-widest text-slate-600">
                   Rainbow Wallet Access
                 </span>
                 <WalletButton />

@@ -72,7 +72,8 @@ describe("EncryptedMoodDiary", function () {
     expect(clearTrend).to.eq(5);
   });
 
-  it("computes a privacy-preserving average trend shareable with other users", async function () {`n    // Test multi-user scenario with encrypted aggregation
+  it("computes a privacy-preserving average trend shareable with other users", async function () {
+    // Test multi-user scenario with encrypted aggregation
     // Alice logs 5
     const encrypt = async (score: number, author: HardhatEthersSigner) =>
       fhevm

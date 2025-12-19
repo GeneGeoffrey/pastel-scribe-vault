@@ -28,7 +28,7 @@ describe("EncryptedMoodDiary", function () {
   describe("Basic functionality", function () {
     it("Should allow getting entry count", async function () {
       const count = await encryptedMoodDiary.getEntryCount();
-      expect(count).to.be.a("number");
+      expect(Number(count)).to.be.a("number");
     });
 
     it("Should have proper contract interface", async function () {

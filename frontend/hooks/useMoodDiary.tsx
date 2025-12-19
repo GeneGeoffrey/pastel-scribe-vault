@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ethers } from "ethers";
 
 import type { FhevmInstance } from "@/fhevm/fhevmTypes";
@@ -342,7 +342,7 @@ export function useMoodDiary({
 
       setClearTrend({
         handle: myTrendHandle,
-        clear: numericValue,
+        clear: numericValue.toString(),
       });
       setMessage("Average decrypted locally.");
     } catch (error) {

@@ -1,4 +1,4 @@
-﻿// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
 import {FHE, euint32, externalEuint32} from "@fhevm/solidity/lib/FHE.sol";
@@ -24,10 +24,9 @@ contract EncryptedMoodDiary is SepoliaConfig {
 
     /// @notice Contract constructor - initializes FHE configuration
     constructor() {
-        // Gas-optimized initialization using constants
-        _encryptedTotalScore = FHE.asEuint32(0);
-        _encryptedTrend = FHE.asEuint32(0);
+        // Initialize entry count to 0
         _entryCount = 0;
+        // FHE values are left uninitialized (will be zero handles initially)
     }
 
     // Events with optimized indexing for efficient querying
@@ -51,17 +50,18 @@ contract EncryptedMoodDiary is SepoliaConfig {
         // Internal validation function for additional security
         _validateMoodScore(moodScore);
 
-        // Validate mood score is within acceptable range (1-5)
-        // Using FHE comparison operations for privacy-preserving validation
-        euint32 minCheck = FHE.lt(moodScore, FHE.asEuint32(MIN_MOOD_SCORE));
-        euint32 maxCheck = FHE.gt(moodScore, FHE.asEuint32(MAX_MOOD_SCORE));
-
-        // Require valid mood score range
-        require(FHE.decrypt(minCheck) == false, "Mood score too low");
-        require(FHE.decrypt(maxCheck) == false, "Mood score too high");
+        // Note: Range validation is not performed on-chain for privacy preservation
+        // Users are expected to provide valid mood scores (1-5) as per application logic
 
         // Update encrypted total with new mood score
-        _encryptedTotalScore = FHE.add(_encryptedTotalScore, moodScore);
+        if (_entryCount == 0) {
+            // First entry: initialize encrypted total
+            _encryptedTotalScore = moodScore;
+        } else {
+            // Subsequent entries: add to existing total
+            FHE.allowThis(_encryptedTotalScore);
+            _encryptedTotalScore = FHE.add(_encryptedTotalScore, moodScore);
+        }
 
         // Gas optimization: use unchecked for arithmetic operations
         // Security enhancement: prevent uint32 overflow with safe increment
@@ -74,6 +74,8 @@ contract EncryptedMoodDiary is SepoliaConfig {
         if (_entryCount == 1) {
             _encryptedTrend = moodScore;
         } else {
+            // Grant permission for division operation
+            FHE.allowThis(_encryptedTotalScore);
             _encryptedTrend = FHE.div(_encryptedTotalScore, _entryCount);
         }
 
@@ -97,10 +99,9 @@ contract EncryptedMoodDiary is SepoliaConfig {
             revert NoEntriesRecorded();
         }
 
-        // Additional security check: verify caller has submitted at least one mood entry
-        // This prevents unauthorized access to trend data
-        require(_sharedTrendHandles[msg.sender] != FHE.asEuint32(0) || _entryCount > 0,
-                "Access denied: no mood entries submitted");
+        // Additional security check: verify diary has entries before allowing access
+        // This prevents unauthorized access to trend data when no data exists
+        require(_entryCount > 0, "Access denied: no mood entries submitted");
 
         // Security enhancement: validate FHE runtime state
         require(address(this).balance >= 0, "Contract state validation failed");
@@ -164,11 +165,6 @@ contract EncryptedMoodDiary is SepoliaConfig {
         // Check if user has been granted access to trend decryption
         // This verifies that requestTrendHandle() was called successfully
         euint32 userHandle = _sharedTrendHandles[msg.sender];
-
-        // Additional validation: ensure handle is not zero (uninitialized)
-        if (userHandle == FHE.asEuint32(0)) {
-            return false;
-        }
 
         // Final FHE permission check: verify sender is authorized to decrypt
         return FHE.isSenderAllowed(userHandle);

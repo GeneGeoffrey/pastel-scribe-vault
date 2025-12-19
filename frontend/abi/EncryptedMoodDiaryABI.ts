@@ -7,7 +7,22 @@ export const EncryptedMoodDiaryABI = {
   "abi": [
     {
       "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidMoodScore",
+      "type": "error"
+    },
+    {
+      "inputs": [],
       "name": "NoEntriesRecorded",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "UnauthorizedAccess",
       "type": "error"
     },
     {
@@ -27,6 +42,50 @@ export const EncryptedMoodDiaryABI = {
         }
       ],
       "name": "MoodSubmitted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "accessor",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint32",
+          "name": "entryCount",
+          "type": "uint32"
+        }
+      ],
+      "name": "TrendAccessed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "decryptor",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "entryCount",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "TrendDecrypted",
       "type": "event"
     },
     {
